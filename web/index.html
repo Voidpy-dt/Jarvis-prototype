@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071321">
+<meta name="description" content="JARVIS — персональный ИИ-помощник">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>JARVIS AI</title>
+<style>
+:root{color-scheme:dark;--bg:#071321;--panel:#0d2033;--panel2:#102a41;--line:#1d405d;--cyan:#69d7ff;--text:#edf8ff;--muted:#8da9bf}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#123858 0%,var(--bg) 58%);font:16px system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text);min-height:100vh}
+.app{max-width:780px;margin:auto;min-height:100dvh;padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom);display:flex;flex-direction:column}
+header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #18334b}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:42px;height:42px;border:1px solid #3a9ac6;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#16466a,#0b1c2c);box-shadow:0 0 25px #1a9ed533;color:var(--cyan);font-size:22px}
+.brand b{letter-spacing:3px;font-size:17px}.sub{font-size:10px;color:var(--cyan);letter-spacing:1.8px;margin-top:3px}.status{font-size:12px;color:#8de2b5;display:flex;align-items:center;gap:7px}.dot{width:7px;height:7px;background:#55d99a;border-radius:50%;box-shadow:0 0 10px #55d99a}
+main{flex:1;display:flex;flex-direction:column;padding:25px 0 18px}.hero{text-align:center;padding:12px 0 20px}.orb{width:142px;height:142px;margin:0 auto 17px;border-radius:50%;display:grid;place-items:center;position:relative;background:radial-gradient(circle,#164d72 0%,#0b2942 55%,#071827 72%);border:1px solid #3b9ac6;box-shadow:0 0 22px #35b9ff55,inset 0 0 30px #2eb7ff33;animation:pulse 3s infinite}
+.orb:before,.orb:after{content:"";position:absolute;border:1px solid #51c9ff66;border-radius:50%;inset:-9px;animation:ring 5s linear infinite}.orb:after{inset:-18px;border-color:#51c9ff33;animation-direction:reverse}.orb span{font-size:48px;color:#a8eaff;text-shadow:0 0 22px #53caff}
+@keyframes pulse{50%{box-shadow:0 0 38px #35b9ff88,inset 0 0 38px #2eb7ff55}}@keyframes ring{to{transform:rotate(360deg)}}
+h1{font-size:23px;margin:0 0 5px;letter-spacing:1px}.tag{font-size:12px;color:var(--muted)}
+.panel{background:linear-gradient(145deg,#10283d,#0a1a2a);border:1px solid var(--line);border-radius:20px;padding:17px;margin-top:10px;box-shadow:0 14px 35px #0003}
+.label{font-size:10px;color:var(--cyan);letter-spacing:1.6px;font-weight:700;margin-bottom:10px}.response{line-height:1.55;white-space:pre-wrap;font-size:14px;color:#e0eff8;min-height:48px}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.chip{border:1px solid #28516f;background:#102b42;color:#c9eaff;padding:9px 11px;border-radius:999px;font-size:12px}
+.composer{display:flex;gap:8px;margin-top:14px}.composer input{min-width:0;flex:1;border:1px solid #28516f;background:#091a29;color:white;border-radius:15px;padding:14px;font-size:14px;outline:none}.composer input:focus{border-color:var(--cyan)}
+button{cursor:pointer;font:inherit}.send,.mic{border:0;border-radius:14px;width:48px;background:linear-gradient(145deg,#36b9f2,#17628d);color:white;font-size:18px}.mic{background:#17344c;border:1px solid #2b5979}.mic.listening{background:#8c2840}
+.tools{display:flex;justify-content:center;gap:18px;color:var(--muted);font-size:11px;margin:16px 0 4px}.tools button{background:none;border:0;color:inherit;font-size:11px}
+footer{text-align:center;color:#66849c;font-size:10px;padding:12px 0 18px}
+@media(min-width:650px){main{padding-top:38px}.hero{padding:25px 0}.orb{width:160px;height:160px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand"><div class="logo">◈</div><div><b>JARVIS</b><div class="sub">PERSONAL AI ASSISTANT</div></div></div><div class="status"><i class="dot"></i> ГОТОВ К РАБОТЕ</div></header>
+<main>
+<section class="hero"><div class="orb"><span>⌁</span></div><h1>Чем могу помочь?</h1><div class="tag">Ваш персональный интеллектуальный помощник</div></section>
+<section class="panel"><div class="label">JARVIS · ОТВЕТ</div><div id="response" class="response">Привет! Я JARVIS — демонстрационный прототип твоего личного помощника. Напиши вопрос или выбери команду ниже.</div></section>
+<div class="quick">
+<button class="chip" data-q="Объясни, что здесь происходит">Объяснить</button>
+<button class="chip" data-q="Помоги составить ответ на сообщение">Ответить на сообщение</button>
+<button class="chip" data-q="Переведи текст на английский">Перевести</button>
+<button class="chip" data-q="Составь краткий план действий">Составить план</button>
+</div>
+<div class="composer"><input id="prompt" placeholder="Спроси Джарвиса..." autocomplete="off"><button id="mic" class="mic" aria-label="Голосовой ввод">🎙</button><button id="send" class="send" aria-label="Отправить">➤</button></div>
+<div class="tools"><button id="speak">🔊 Озвучить ответ</button><button id="clear">Очистить диалог</button><button id="install" hidden>Установить приложение</button></div>
+</main>
+<footer>ПРОТОТИП 0.1 · Пока работает в демонстрационном режиме, без подключения к ИИ</footer>
+</div>
+<script>
+const response=document.getElementById('response'), input=document.getElementById('prompt');
+function reply(q){
+ const s=q.toLowerCase(); let a;
+ if(/перевед|англий/.test(s)) a="Пришли текст, который нужно перевести. В этой демонстрационной версии я пока не подключён к онлайн-переводчику.";
+ else if(/сообщен|ответ/.test(s)) a="Покажи сообщение или вставь его сюда. Я помогу подготовить спокойный, вежливый и понятный ответ.";
+ else if(/план/.test(s)) a="Давай разобьём задачу на шаги: 1) определим цель; 2) соберём необходимые данные; 3) выберем лучший способ; 4) проверим результат.";
+ else if(/экран|происходит|анализ/.test(s)) a="Чтобы анализировать экран другого приложения, нужно передать его содержимое JARVIS через снимок экрана или системное меню «Поделиться». Автоматический доступ ограничен правилами iOS и Android.";
+ else a="Я получил запрос: «"+q+"».\n\nСейчас это интерфейсный прототип с демонстрационными ответами. Следующий этап — подключить языковую модель, историю диалога и безопасную передачу контекста экрана.";
+ response.textContent=a;
+}
+document.getElementById('send').onclick=()=>{const q=input.value.trim();if(q){reply(q);input.value=''}};
+input.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('send').click()});
+document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{input.value=b.dataset.q;document.getElementById('send').click()});
+document.getElementById('clear').onclick=()=>response.textContent='Диалог очищен. Чем могу помочь?';
+document.getElementById('speak').onclick=()=>{if('speechSynthesis'in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(response.textContent))}else alert('Озвучивание не поддерживается этим браузером')};
+const mic=document.getElementById('mic');let rec;
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SR){rec=new SR();rec.lang='ru-RU';rec.interimResults=false;rec.onresult=e=>{input.value=e.results[0][0].transcript};rec.onend=()=>mic.classList.remove('listening');mic.onclick=()=>{try{mic.classList.add('listening');rec.start()}catch(e){mic.classList.remove('listening')}}}else mic.onclick=()=>alert('Голосовой ввод в этом браузере недоступен. Попробуй Chrome.');
+let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;const b=document.getElementById('install');b.hidden=false;b.onclick=async()=>{installPrompt.prompt();installPrompt=null;b.hidden=true}});
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body></html>
